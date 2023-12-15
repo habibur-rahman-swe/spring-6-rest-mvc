@@ -6,7 +6,9 @@ import java.util.UUID;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,26 +28,42 @@ import lombok.extern.slf4j.Slf4j;
 public class BeerController {
 	private final BeerService beerService;
 
-	@PutMapping("{beerId}")
-	public ResponseEntity<Beer> updateById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
+	@PatchMapping("{beerId}")
+	public ResponseEntity<Beer> updateBeerPathById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
 		
-		beerService.updateBeerById(beerId, beer);
+		beerService.patchBeerById(beerId, beer);
 		
 		return new ResponseEntity<Beer>(HttpStatus.NO_CONTENT);
 	}
 	
+	@DeleteMapping("{beerId}")
+	public ResponseEntity<Beer> deleteByID(@PathVariable("beerId") UUID beerId) {
+
+		beerService.deleteById(beerId);
+		
+		return new ResponseEntity<Beer>(HttpStatus.NO_CONTENT);
+	}
+
+	@PutMapping("{beerId}")
+	public ResponseEntity<Beer> updateById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
+
+		beerService.updateBeerById(beerId, beer);
+
+		return new ResponseEntity<Beer>(HttpStatus.NO_CONTENT);
+	}
+
 	@PostMapping
 	public ResponseEntity<Beer> handlePost(@RequestBody Beer beer) {
-		
+
 		Beer savedBeer = beerService.saveNewBeers(beer);
-		
+
 		HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/beer/" + savedBeer.getId().toString());
-		
+		headers.add("Location", "/api/v1/beer/" + savedBeer.getId().toString());
+
 		return new ResponseEntity<Beer>(headers, HttpStatus.CREATED);
-		
+
 	}
-	
+
 	@GetMapping
 	public List<Beer> listBeers() {
 		return beerService.listBeers();

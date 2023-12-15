@@ -58,7 +58,6 @@ Learn about `project lombok` and `spring rest mvc`.
     
 -   `@RequestBody`: bind the `json` to the `object`
 
-    -   Example
     
             @PostMapping
             public ResponseEntity<Beer> handlePost(@RequestBody Beer beer) {
@@ -73,7 +72,7 @@ Learn about `project lombok` and `spring rest mvc`.
 
 
 -   `@PutMapping`: used to update an object or put an object
-    -   Example:
+
 
             @PutMapping("{beerId}")
             public ResponseEntity<Beer> updateById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
@@ -83,3 +82,24 @@ Learn about `project lombok` and `spring rest mvc`.
                 return new ResponseEntity<Beer>(HttpStatus.NO_CONTENT);
             }
 
+
+-   `@DeleteMapping`:
+    
+        @DeleteMapping("{beerId}")
+        public ResponseEntity<Beer> deleteByID(@PathVariable("beerId") UUID beerId) {
+
+            beerService.deleteById(beerId);
+            
+            return new ResponseEntity<Beer>(HttpStatus.NO_CONTENT);
+        }
+
+-   `@PatchMapping`:
+@PatchMapping("{beerId}")
+ 
+        @PatchMapping("{beerId}")
+        public ResponseEntity<Beer> updateBeerPathById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
+            
+            beerService.patchBeerById(beerId, beer);
+            
+            return new ResponseEntity<Beer>(HttpStatus.NO_CONTENT);
+        }
