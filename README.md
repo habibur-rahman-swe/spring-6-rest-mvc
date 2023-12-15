@@ -71,3 +71,15 @@ Learn about `project lombok` and `spring rest mvc`.
                 return new ResponseEntity<Beer>(headers, HttpStatus.CREATED);
             }
 
+
+-   `@PutMapping`: used to update an object or put an object
+    -   Example:
+
+            @PutMapping("{beerId}")
+            public ResponseEntity<Beer> updateById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
+                
+                beerService.updateBeerById(beerId, beer);
+                
+                return new ResponseEntity<Beer>(HttpStatus.NO_CONTENT);
+            }
+
