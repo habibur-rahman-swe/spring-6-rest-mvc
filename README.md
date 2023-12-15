@@ -53,3 +53,21 @@ Learn about `project lombok` and `spring rest mvc`.
 -  `@RequiredArgsConstructor`: Construct only required args constructor
 
 -   `spring-boot-devtools`: restart spring-boot autometicaly every time after editing the spring-boot codes
+
+-   `@PostMapping`: used for `post`
+    
+-   `@RequestBody`: bind the `json` to the `object`
+
+    -   Example
+    
+            @PostMapping
+            public ResponseEntity<Beer> handlePost(@RequestBody Beer beer) {
+                
+                Beer savedBeer = beerService.saveNewBeers(beer);
+                
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Location", "/api/v1/beer/" + savedBeer.getId().toString());
+                
+                return new ResponseEntity<Beer>(headers, HttpStatus.CREATED);
+            }
+
