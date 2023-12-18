@@ -18,14 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import habib.springframework.springrest6mvc.model.Beer;
 import habib.springframework.springrest6mvc.services.BeerService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/beer")
 public class BeerController {
+	
 	private final BeerService beerService;
 
 	@PatchMapping("{beerId}")
@@ -71,6 +72,7 @@ public class BeerController {
 
 	@GetMapping("{beerId}")
 	public Beer getBeerById(@PathVariable("beerId") UUID beerId) {
+		
 		log.debug("Get Beer By ID - in controller. ID: ");
 
 		return beerService.getBeerById(beerId);
