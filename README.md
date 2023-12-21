@@ -152,3 +152,27 @@ ObjectMapper objectMapper;
 		System.out.println(objectMapper.writeValueAsString(beer));
 	}
 ```
+
+-   `post test`:
+```
+@Test
+	void testCreateNewBeer() throws Exception {
+		
+		Beer beer = beerServiceImpl.listBeers().get(0);
+		
+//		System.out.println(objectMapper.writeValueAsString(beer));
+		
+		beer.setVersion(null);
+		beer.setId(null);
+		
+		given(beerService.saveNewBeers(any(Beer.class))).willReturn(beerServiceImpl.listBeers().get(1));
+		
+		mockMvc.perform(post("/api/v1/beer").accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(beer)))
+				.andExpect(status().isCreated())
+				.andExpect(header().exists("Location"));
+		
+	}
+```
+
