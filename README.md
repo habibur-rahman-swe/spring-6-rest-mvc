@@ -103,3 +103,52 @@ Learn about `project lombok` and `spring rest mvc`.
             
             return new ResponseEntity<Beer>(HttpStatus.NO_CONTENT);
         }
+
+-   `@WebMvcTest` & `@MockBean`
+    -   GetId
+    ```
+    @Test
+	void getBeerById() throws Exception {
+
+		Beer testBeer = beerServiceImpl.listBeers().get(0);
+
+		 given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
+		
+		mockMvc.perform(get("/api/v1/beer/" + testBeer.getId())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(testBeer.getId().toString())))
+                .andExpect(jsonPath("$.beerName", is(testBeer.getBeerName() + "go")));
+
+	}
+    ```
+    -   GetList
+        
+        ```
+        @Test
+	    void testListBeers() throws Exception {
+            given(beerService.listBeers()).willReturn(beerServiceImpl.listBeers());
+            
+            mockMvc.perform(get("/api/v1/beer").accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.length()", is(4)));
+        }
+        ```
+
+-   `ObjectMapper class`: ObjectMapper provides functionality for reading and writing JSON, either to and from basic POJOs (Plain Old Java Objects), or to and from a general-purpose JSON Tree Model ( JsonNode ), as well as related functionality for performing conversions.
+
+```
+@Autowired
+ObjectMapper objectMapper;
+```
+```
+@Test
+	void testCreateNewBeer() throws JsonProcessingException {
+		
+		Beer beer = beerServiceImpl.listBeers().get(0);
+		
+		System.out.println(objectMapper.writeValueAsString(beer));
+	}
+```
