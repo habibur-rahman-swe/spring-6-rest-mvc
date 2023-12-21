@@ -191,3 +191,19 @@ ObjectMapper objectMapper;
 	}
 ```
 
+-   `Delete test`:
+```
+@Test
+	void testDeleteBeer() throws Exception {
+		Beer beer = beerServiceImpl.listBeers().get(0);
+		
+		mockMvc.perform(delete("/api/v1/beer/" + beer.getId())
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNoContent());
+		
+		ArgumentCaptor<UUID> uuidArgumentCaptor = ArgumentCaptor.forClass(UUID.class);
+		verify(beerService).deleteById(uuidArgumentCaptor.capture());
+		
+		assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+	}
+```
