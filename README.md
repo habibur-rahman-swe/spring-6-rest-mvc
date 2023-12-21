@@ -176,3 +176,18 @@ ObjectMapper objectMapper;
 	}
 ```
 
+-   `Put test`:
+```
+@Test
+	void testUpdateBeer() throws Exception {
+		Beer beer = beerServiceImpl.listBeers().get(0);
+		
+		mockMvc.perform(put("/api/v1/beer/" + beer.getId()).accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(beer)))
+				.andExpect(status().isNoContent());
+		
+		verify(beerService).updateBeerById(any(UUID.class), any(Beer.class));
+	}
+```
+
