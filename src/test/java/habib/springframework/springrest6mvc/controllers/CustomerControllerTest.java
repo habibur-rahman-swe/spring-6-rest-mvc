@@ -22,7 +22,7 @@ import habib.springframework.springrest6mvc.model.Customer;
 import habib.springframework.springrest6mvc.services.CustomerService;
 import habib.springframework.springrest6mvc.services.impl.CustomerServiceImpl;
 
-@WebMvcTest(value = CustomerController.class)
+@WebMvcTest(CustomerController.class)
 class CustomerControllerTest {
 
 	@Autowired
