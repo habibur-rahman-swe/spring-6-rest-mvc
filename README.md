@@ -243,3 +243,17 @@ public ResponseEntity<Beer> handleNotFoundException() {
 }
 ```
 
+-   `@ControllerAdvice`
+```
+@ControllerAdvice
+public class ExceptionController {
+	@ExceptionHandler(NotFoundException.class)
+	public ResponseEntity<Beer> handleNotFoundException() {
+		System.out.println("In exception handler");
+		
+		return ResponseEntity.notFound().build();
+	}
+}
+
+```
+
