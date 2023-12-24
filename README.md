@@ -232,3 +232,14 @@ ObjectMapper objectMapper;
 		
 	}
 ```
+
+-   `@ExceptionHandler`:
+```
+@ExceptionHandler(NotFoundException.class)
+public ResponseEntity<Beer> handleNotFoundException() {
+    System.out.println("In exception handler");
+    
+    return ResponseEntity.notFound().build();
+}
+```
+
