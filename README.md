@@ -232,3 +232,61 @@ ObjectMapper objectMapper;
 		
 	}
 ```
+
+-   `@ExceptionHandler`:
+```
+@ExceptionHandler(NotFoundException.class)
+public ResponseEntity<Beer> handleNotFoundException() {
+    System.out.println("In exception handler");
+    
+    return ResponseEntity.notFound().build();
+}
+```
+
+-   `@ControllerAdvice`
+```
+@ControllerAdvice
+public class ExceptionController {
+	@ExceptionHandler(NotFoundException.class)
+	public ResponseEntity<Beer> handleNotFoundException() {
+		System.out.println("In exception handler");
+		
+		return ResponseEntity.notFound().build();
+	}
+}
+
+```
+
+-   `@ResponseStatus`:
+```
+@ResponseStatus(value=HttpStatus.NOT_FOUND, reason = "Value not found")
+public class NotFoundException extends RuntimeException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public NotFoundException() {
+
+	}
+
+	public NotFoundException(String message) {
+		super(message);
+	}
+
+	public NotFoundException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public NotFoundException(Throwable cause) {
+		super(cause);
+	}
+
+	public NotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+}
+
+```

@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import habib.springframework.springrest6mvc.model.Customer;
 import habib.springframework.springrest6mvc.services.CustomerService;
@@ -18,7 +20,7 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	private Map<UUID, Customer> customerMap;
 	
-	CustomerServiceImpl() {
+	public CustomerServiceImpl() {
 		Customer customer1 = Customer.builder()
 							.id(UUID.randomUUID())
 							.name("Customer 1")
@@ -51,13 +53,42 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	@Override
-	public Customer getCustomerById(UUID uuid) {
-		return customerMap.get(uuid);
+	public Optional<Customer> getCustomerById(UUID uuid) {
+		return Optional.of(customerMap.get(uuid));
 	}
 
 	@Override
 	public List<Customer> getAllCustomers() {
 		return new ArrayList<>(customerMap.values());
+	}
+
+	@Override
+	public void patchCustomerById(UUID customerId, Customer customer) {
+		Customer existing = customerMap.get(customerId);
+		
+		if (StringUtils.hasText(customer.getName())) {
+			existing.setName(customer.getName());
+		}
+	}
+
+	@Override
+	public void deleteCustomerById(UUID customerId) {
+		customerMap.remove(customerId);
+	}
+
+	@Override
+	public Customer saveNewCustomer(Customer customer) {
+		Customer savedCustomer = Customer.builder()
+								.id(UUID.randomUUID())
+								.version(1)
+								.updateDate(LocalDateTime.now())
+								.createdDate(LocalDateTime.now())
+								.name(customer.getName())
+								.build();
+		
+		customerMap.put(savedCustomer.getId(), savedCustomer);
+		
+		return savedCustomer;
 	}
 
 	
