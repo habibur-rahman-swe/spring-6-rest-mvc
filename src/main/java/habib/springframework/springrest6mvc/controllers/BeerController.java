@@ -76,7 +76,7 @@ public class BeerController {
 
 		log.debug("Get Beer By ID - in controller. ID: ");
 
-		return beerService.getBeerById(beerId);
+		return beerService.getBeerById(beerId).orElseThrow(NotFoundException::new);
 	}
 
 }
