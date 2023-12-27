@@ -290,3 +290,5 @@ public class NotFoundException extends RuntimeException {
 }
 
 ```
+
+-	`Optional class`

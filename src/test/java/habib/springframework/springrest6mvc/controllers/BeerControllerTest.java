@@ -33,7 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import habib.springframework.springrest6mvc.model.Beer;
+import habib.springframework.springrest6mvc.model.BeerDTO;
 import habib.springframework.springrest6mvc.services.BeerService;
 import habib.springframework.springrest6mvc.services.impl.BeerServiceImpl;
 
@@ -55,7 +55,7 @@ class BeerControllerTest {
 	ArgumentCaptor<UUID> uuidArgumentCaptor;
 
 	@Captor
-	ArgumentCaptor<Beer> beerArgumentCaptor;
+	ArgumentCaptor<BeerDTO> beerArgumentCaptor;
 
 	BeerServiceImpl beerServiceImpl;
 
@@ -66,61 +66,61 @@ class BeerControllerTest {
 
 	@Test
 	void testPatchBeer() throws JsonProcessingException, Exception {
-		Beer beer = beerServiceImpl.listBeers().get(0);
+		BeerDTO beerDTO = beerServiceImpl.listBeers().get(0);
 
 		Map<String, Object> beerMap = new HashMap<>();
 
 		beerMap.put("beerName", "New Name");
 
-		mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId()).contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(patch(BeerController.BEER_PATH_ID, beerDTO.getId()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(beerMap)))
 				.andExpect(status().isNoContent());
 
 		verify(beerService).patchBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
 
-		assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+		assertThat(beerDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
 		assertThat(beerMap.get("beerName")).isEqualTo(beerArgumentCaptor.getValue().getBeerName());
 
 	}
 
 	@Test
 	void testDeleteBeer() throws Exception {
-		Beer beer = beerServiceImpl.listBeers().get(0);
+		BeerDTO beerDTO = beerServiceImpl.listBeers().get(0);
 
-		mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId()).accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(delete(BeerController.BEER_PATH_ID, beerDTO.getId()).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent());
 
 		ArgumentCaptor.forClass(UUID.class);
 		verify(beerService).deleteById(uuidArgumentCaptor.capture());
 
-		assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+		assertThat(beerDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
 	}
 
 	@Test
 	void testUpdateBeer() throws Exception {
-		Beer beer = beerServiceImpl.listBeers().get(0);
+		BeerDTO beerDTO = beerServiceImpl.listBeers().get(0);
 
-		mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId()).accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(beer)))
+		mockMvc.perform(put(BeerController.BEER_PATH_ID, beerDTO.getId()).accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(beerDTO)))
 				.andExpect(status().isNoContent());
 
-		verify(beerService).updateBeerById(any(UUID.class), any(Beer.class));
+		verify(beerService).updateBeerById(any(UUID.class), any(BeerDTO.class));
 	}
 
 	@Test
 	void testCreateNewBeer() throws Exception {
 
-		Beer beer = beerServiceImpl.listBeers().get(0);
+		BeerDTO beerDTO = beerServiceImpl.listBeers().get(0);
 
 //		System.out.println(objectMapper.writeValueAsString(beer));
 
-		beer.setVersion(null);
-		beer.setId(null);
+		beerDTO.setVersion(null);
+		beerDTO.setId(null);
 
-		given(beerService.saveNewBeers(any(Beer.class))).willReturn(beerServiceImpl.listBeers().get(1));
+		given(beerService.saveNewBeers(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().get(1));
 
 		mockMvc.perform(post(BeerController.BEER_PATH).accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(beer)))
+				.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(beerDTO)))
 				.andExpect(status().isCreated()).andExpect(header().exists("Location"));
 
 	}
@@ -142,7 +142,7 @@ class BeerControllerTest {
 	@Test
 	void getBeerById() throws Exception {
 
-		Beer testBeer = beerServiceImpl.listBeers().get(0);
+		BeerDTO testBeer = beerServiceImpl.listBeers().get(0);
 
 		given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 

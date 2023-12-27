@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import habib.springframework.springrest6mvc.model.Customer;
+import habib.springframework.springrest6mvc.model.CustomerDTO;
 import habib.springframework.springrest6mvc.services.CustomerService;
 import habib.springframework.springrest6mvc.services.impl.CustomerServiceImpl;
 
@@ -43,7 +43,7 @@ class CustomerControllerTest {
 	ArgumentCaptor<UUID> uuidArgumentCaptor;
 
 	@Captor
-	ArgumentCaptor<Customer> customerArgumentCaptor;
+	ArgumentCaptor<CustomerDTO> customerArgumentCaptor;
 
 	CustomerServiceImpl customerServiceImpl;
 
@@ -58,8 +58,9 @@ class CustomerControllerTest {
 		mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID())).andExpect(status().isNotFound());
 	}
 	
+	@Test
 	void getCustomerByID() throws Exception {
-		Customer testCustomer = customerServiceImpl.getAllCustomers().get(0);
+		CustomerDTO testCustomer = customerServiceImpl.getAllCustomers().get(0);
 		
 		given(customerService.getCustomerById(testCustomer.getId())).willReturn(Optional.of(testCustomer));
 		
@@ -67,7 +68,7 @@ class CustomerControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.id", is(testCustomer.getId().toString())))
-				.andExpect(jsonPath("$.customerName", is(testCustomer.getName())));
+				.andExpect(jsonPath("$.name", is(testCustomer.getName())));
 		
 	}
 
