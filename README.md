@@ -292,3 +292,44 @@ public class NotFoundException extends RuntimeException {
 ```
 
 -	`Optional class`
+
+-	`@Version`
+
+-	`@GenericGenerator`: 
+```
+@Id
+@GeneratedValue(generator = "UUID")
+@GenericGenerator(
+	name = "UUID", 
+	strategy = "org.hibernate.id.UUIDGenerator"
+	)
+@Column(
+	length = 26, 
+	columnDefinition = "varchar", 
+	updatable = false, nullable = false
+	)
+private UUID id;
+```
+
+-	`@DataJpaTest`:
+Minimum configuration to test spring data JPA
+```
+@DataJpaTest
+class CustomerRepositoryTest {
+
+	@Autowired
+	CustomerRepository customerRepository;
+	
+	@Test
+	void testSavedCustomer() {
+		Customer customer = customerRepository.save(Customer.builder()
+							.name("Customer")
+							.build());
+		
+		assertThat(customer).isNotNull();
+		assertThat(customer.getId()).isNotNull();
+	}
+
+}
+
+```
