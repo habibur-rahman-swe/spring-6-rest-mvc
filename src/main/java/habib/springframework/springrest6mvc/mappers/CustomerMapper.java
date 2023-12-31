@@ -8,7 +8,7 @@ import habib.springframework.springrest6mvc.model.CustomerDTO;
 @Mapper
 public interface CustomerMapper {
 
-	Customer customebrDtoToCustomer(CustomerDTO dto);
+	Customer customerDtoToCustomer(CustomerDTO dto);
 	
 	CustomerDTO customerToCustomerDto(Customer customer);
 	

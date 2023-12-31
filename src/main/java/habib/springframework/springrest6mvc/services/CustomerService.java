@@ -8,14 +8,10 @@ import habib.springframework.springrest6mvc.model.CustomerDTO;
 
 public interface CustomerService {
 	
-	Optional<CustomerDTO> getCustomerById(UUID uuid);
-	
 	List<CustomerDTO> getAllCustomers();
-
-	void patchCustomerById(UUID customerId, CustomerDTO customerDTO);
-
-	void deleteCustomerById(UUID customerId);
-
+	Optional<CustomerDTO> getCustomerById(UUID uuid);
 	CustomerDTO saveNewCustomer(CustomerDTO customerDTO);
-	
+	Optional<CustomerDTO> updateCustomerByID(UUID customerId, CustomerDTO customerDTO);
+	Boolean deleteCustomerById(UUID customerId);
+	void patchCustomerById(UUID customerId, CustomerDTO customerDTO);
 }

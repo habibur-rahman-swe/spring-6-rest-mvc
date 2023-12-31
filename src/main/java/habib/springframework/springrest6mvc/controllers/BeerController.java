@@ -26,9 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 public class BeerController {
 
 	public static final String BEER_PATH = "/api/v1/beer";
-	public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
+    public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
-	private final BeerService beerService;
+    private final BeerService beerService;
 
 	@PatchMapping(BEER_PATH_ID)
 	public ResponseEntity<BeerDTO> updateBeerPathById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beerDTO) {
@@ -41,7 +41,9 @@ public class BeerController {
 	@DeleteMapping(BEER_PATH_ID)
 	public ResponseEntity<BeerDTO> deleteByID(@PathVariable("beerId") UUID beerId) {
 
-		beerService.deleteById(beerId);
+		if (! beerService.deleteById(beerId)) {
+			throw new NotFoundException();
+		}
 
 		return new ResponseEntity<BeerDTO>(HttpStatus.NO_CONTENT);
 	}
@@ -49,7 +51,9 @@ public class BeerController {
 	@PutMapping(BEER_PATH_ID)
 	public ResponseEntity<BeerDTO> updateById(@PathVariable("beerId") UUID beerId, @RequestBody BeerDTO beerDTO) {
 
-		beerService.updateBeerById(beerId, beerDTO);
+		if (beerService.updateBeerById(beerId, beerDTO).isEmpty()) {
+			throw new NotFoundException();
+		}
 
 		return new ResponseEntity<BeerDTO>(HttpStatus.NO_CONTENT);
 	}
